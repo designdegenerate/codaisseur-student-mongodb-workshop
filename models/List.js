@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 const listSchema = new Schema({
-  user: String,
+  owner: String,
   createdAt: Date,
   updatedAt: Date,
   items: [{

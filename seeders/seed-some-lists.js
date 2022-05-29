@@ -9,7 +9,7 @@ const seedSomeLists = async () => {
   try {
     const someLists = await List.create(
       {
-        user: "laurens",
+        owner: "laurens",
         createdAt: new Date(),
         updatedAt: new Date(),
         items: [
@@ -26,7 +26,7 @@ const seedSomeLists = async () => {
         ],
       },
       {
-        user: "david",
+        owner: "david",
         createdAt: new Date(),
         updatedAt: new Date(),
         items: [
