@@ -167,7 +167,7 @@ const mongoose = require("mongoose");
 const List = require("../models/List");
 
 mongoose.connect(
-  "mongodb+srv://dbAdmin:lb63hneyWNalFZhj@cluster0.bsw1yaz.mongodb.net/?retryWrites=true&w=majority"
+  "<your mongodb url here>"
 );
 
 const seedSomeLists = async () => {
@@ -265,7 +265,7 @@ app.get("/lists", async(req, res) => {
 1. Create a new endpoint in ``/lists/:owner``
 2. Use ``List.findOne()`` to retrieve the user from the params. (Hint: remember Sequelize? 😉)
 
-``
+```
 app.get("/lists/:owner", async(req, res) => {
   try {
     const getList = await List.findOne({user: req.params.owner});
@@ -275,13 +275,13 @@ app.get("/lists/:owner", async(req, res) => {
     res.status(500).send("something went wrong");
   }
 })
-``
+```
 
 ## Exercise: Creating a new POST endpoint
 1. Create a new endpoint to create a new user at ``/user``
 2. Get the information from the request body and use it to create a new user.
 
-``
+```
 app.post("/user", async(req, res) => {
   try {
     const {name, email} = req.body;
@@ -295,13 +295,13 @@ app.post("/user", async(req, res) => {
     res.status(500).send("something went wrong")
   }
 })
-``
+```
 
 ## Exercise: Create a DELETE endpoint
 1. create a new delete endpoint at ``/list/:owner`` to delete a list.
 2. Hint: You might want to use the ``Model.deleteOne()`` function.
 
-``
+```
 app.delete("/lists/:owner", async(req, res) => {
   try {
     const deleteList = await List.deleteOne({owner: req.params.owner});
@@ -311,12 +311,12 @@ app.delete("/lists/:owner", async(req, res) => {
     res.status(500).send("something went wrong");
   }
 })
-``
+```
 
 ## Exercise: Create a PATCH endpoint
 1. Create a new patch endpoint at ``/list/:owner/:index`` to allow users to change the title of a ToDo entry based on its index in the list.
 
-``
+```
 app.patch("/lists/:owner/:index", async(req, res) => {
   try {
     const index = req.params.index;
@@ -331,7 +331,7 @@ app.patch("/lists/:owner/:index", async(req, res) => {
     res.status(500).send("something went wrong");
   }
 })
-``
+```
 
 ## Linking Collections
 Generally, the principle of MongoDB is that “data that is accessed together should be stored together.” However, there are cases where you would want multiple collections linked together with different schemas. Let’s create one together!
@@ -339,7 +339,7 @@ Generally, the principle of MongoDB is that “data that is accessed together sh
 ### Exercise: Create a new User model and link it to the List model
 1. create a new model in ``/models/User.js`` with the following:
 
-``
+```
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
@@ -358,11 +358,11 @@ const userSchema = new Schema({
 
 const User = model('User', userSchema);
 module.exports = User;
-``
+```
 
 2. Let’s create a new seed to create some users:
 
-``
+```
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
@@ -390,11 +390,11 @@ const seedSomeUsers = async () => {
 };
 
 seedSomeUsers();
-``
+```
 
 3. Now, let’s create a new field in the List Model that references the User. Don’t forget to add ``SchemaTypes`` when destructuring mongoose! 
 
-``
+```
 const mongoose = require('mongoose');
 const { Schema, SchemaTypes, model } = mongoose;
 const User = require('./User.js');
@@ -417,11 +417,11 @@ const listSchema = new Schema({
 
 const List = model('List', listSchema);
 module.exports = List;
-``
+```
 
 4. Now for the annoying part... We’ll need to delete our users and reseed them with some changes! Delete the current lists in any way you want and modify the List seed:
 
-``
+```
 const mongoose = require("mongoose");
 const List = require("../models/List");
 const User = require("../models/User");
@@ -491,10 +491,13 @@ const seedSomeListsAndUsers = async () => {
 };
 
 seedSomeListsAndUsers();
-``
+```
 
 5. Run your new seed!
 6. Modify your ``/lists/:owner`` path to also include the user collection:
 
-``const getList = await List.findOne({user: req.params.owner}).populate("user");``
+```
+const getList = await List.findOne({user: req.params.owner}).populate("user");
+```
+
 7. test your new path with HTTPie and there should be a new document attached to the user field from the User collection!
